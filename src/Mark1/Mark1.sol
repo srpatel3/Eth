@@ -11,17 +11,19 @@ contract LLMapping{
     head = 'root';
     nodes['root'].next = 'root';
     nodes['root'].addr = 0;
+    //nodes[].next = 'shirish';
+    //nodes[_name].addr = _addr;
   }
 
   //function for adding elements to linked list
-  function add(string _name, address _addr){
+  function add(string _name){
     nodes[_name].next = head;
-    nodes[_name].addr = _addr;
+    nodes[_name].addr = 3;
     head = _name;
   }
 
-function greet() constant returns (string,string,address){
-    return (head,nodes['root'].next,nodes['roots'].addr);
+function greet(string _name) constant returns (string,string,address){
+    return (head,nodes[_name].next,nodes[_name].addr);
 }
 function stringsEqual(string _a, string _b) internal returns (bool) {
 		bytes memory a = bytes(_a);
@@ -41,10 +43,11 @@ function stringsEqual(string _a, string _b) internal returns (bool) {
 
    function iterate() constant returns (uint){
     uint count = 0;
-    string name;
-    for(name = head; stringsEqual(name,head);name = nodes[name].next){
-      count++;
-    }
+    if(stringsEqual("shirish","shirish"))
+        count = 6;
+    //for(name = head; stringsEqual(name,head);name = nodes[name].next){
+    //  count++;
+    //}
     return count;
   }
 

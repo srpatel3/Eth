@@ -1,0 +1,28 @@
+//Using these parameter you may want to start your private chain so that it won't clash with mine.
+
+
+geth --datadir "Name of the directory" init "Address of genesis.json"
+
+geth --identity "Node1" --rpc --rpcport "8001" --rpccorsdomain "*" --datadir "Name of Data dir" --port "30301" --nodiscover -ipcapi "admin,db,eth,debug,miner,net,shh,txpool,personal,web3" -rpcapi "db,eth,net,web3" --autodag --networkid 4828 --nat "any" console
+
+//after starting  chain using another terminal
+
+geth attach ipc:Address of data dir/geth.ipc //this will help you open a new geth console
+
+//then create new account using
+
+personal.newAccount()
+
+//get some ethers using
+
+miner.start() //this will start generating DAG, will take some time
+
+//check balance using
+
+eth.getBalance(eth.accounts[0])
+
+//you can stop mining now
+
+miner.stop()
+
+You will have one private chain ready to be connected to our own cluster.
