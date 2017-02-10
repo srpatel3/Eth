@@ -3,7 +3,7 @@
 
 geth --datadir "Name of the directory" init "Address of genesis.json"
 
-geth --identity "Node1" --rpc --rpcport "8001" --rpccorsdomain "*" --datadir "Name of Data dir" --port "30301" --nodiscover -ipcapi "admin,db,eth,debug,miner,net,shh,txpool,personal,web3" -rpcapi "db,eth,net,web3" --autodag --networkid 4828 --nat "any" console
+geth --identity "Node1" --rpc --rpcport "8001" --rpccorsdomain "*" --datadir "/home/shirish/Chain" --port "30301" --nodiscover -ipcapi "admin,db,eth,debug,miner,net,shh,txpool,personal,web3" -rpcapi "db,eth,net,web3" --autodag --networkid 4828 --nat "any" console
 
 //after starting  chain using another terminal
 
