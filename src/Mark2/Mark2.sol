@@ -1,45 +1,77 @@
+pragma solidity ^0.4.9;
 contract Mark2{
-    uint counter;
+    uint public counter;
     struct list{
         string typo;  // name of dataset
-        string keyword;
-        address addr; // seller address
+        address head; // seller address
         bool exists;  // does this bucket contain valid data?
     }
+
     mapping (string => list) _list;
+
     struct node{
         address add;
         address next;  // can next == 0x00000000000000000000000000  ?
-        address head;
     }
 
     mapping (string =>mapping(address=>node)) _node;
-
-    address head = 0x0000;  //???
+    //node[][] _nodes;
 
     function Mark2(){
-        _node['root'][0].add = 1;
+        _node['root'][6].add = 6;
+        _node['shirish'][5].add = 5;
+        _list['shirish'].typo = 'shirish';
         _list['root'].typo = 'something';
         counter = 3;
     }
 
-    function add(string _typo){
+    function getData(string _typo, address _add) constant returns(string, address){
+        return (_list[_typo].typo, _node[_typo][_add].add );
+    }
 
-        if(!_list[_typo].exists){
-            _list[_typo].typo = _typo;
-            _list[_typo].exists = true;
-            _list[_typo].addr = 0;
-            counter++;
+    function add(string _typo1,address _addr){
+        string memory _typo = _typo1;
+        address addr = _addr;
+            addToList(_typo1);
+            addToNodes(_typo , _addr);
+
+    }
+
+    function addToList(string _typo){
+        _list[_typo].typo = _typo;
+    }
+
+    function addToNodes(string _typo,address _addr){
+
+        _node[_typo][_addr].next = _addr;
+        //_list[_typo].typo = _typo;
+        _node[_typo][_addr].add =_addr;
+
+    }
+
+    function iterate(string _typo) constant returns(uint){
+        //uint count = 0;
+        string memory name;
+        address _addr;
+        uint count = 0;
+        //if(stringsEqual("shirish","shirish"))
+        //   count = 6;
+        //for(uint i=0;i<5;i++)
+        //   counter++;
+        for( _addr = _list[_typo].head;_addr!=0 ;_addr = _node[_typo][_addr].next){
+            count++;
         }
-        else{
-            // here we add a new list node. Maybe also check
-            // for a matching existing list node?
-            counter--;
-        }
+        return count;
+    }
+
+    function getCounter() constant returns(uint){
+        return counter;
     }
 
 
-#     function addbyDSName(node n){
+
+}
+/*#     function addbyDSName(node n){
 #
 #         if(!_list[n.typo].exists){
 #             _list[n.typo].typo = _keyword;
@@ -71,20 +103,12 @@ contract Mark2{
 #         }
 #     }
 
+*/
+  //  function lookupByDSName(string dsname) constant returns(node []) {
 
-    function lookupByDSName(string dsname) constant returns(node []) {
-
-    }
+    //}
 
 // not needed yet
-#     function lookupByKeyWord(string keyword) constant returns(node []) {
-#
-#     }
-
-    function getCounter() constant returns(uint){
-        return counter;
-    }
-    function getData(string _typo, address _add) constant returns(string, address){
-        return (_list[_typo].typo, _node[_typo][_add].add );
-    }
-}
+//88#     function lookupByKeyWord(string keyword) constant returns(node []) {/
+//#
+//#     }
