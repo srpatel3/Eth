@@ -9,5 +9,5 @@ loadScript("/home/shirish/Eth/Scripts/Compiled")
 setTimeout(doSomething, 5000);
 
 function doSomething() {
-   x.makeNewDataset('ABCD')
+   x.teststrConcat()
 }
