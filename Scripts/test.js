@@ -1,18 +1,16 @@
-var typo = 'shirish';
-var typo1 = "patel";
-//var head = x.getHead(typo);
-var head = "0x000000000000000000000000000000000000000a";
-//var head = 9;
+var typo = 'shirish'; //THIS WILL BE THE NAME OF DATASET THAT YOU WANT INFORMATION
+var typo1 = "patel";  //SAME AS ABOVE JUST WITH DIFFERENT NAME
+var head = x.getHead(typo1);
 var _tempAddress;
 //var typo = "";
 var Address = "";
 var Name="";
 var Account="";
 var IPA="";
-var Comp = 9;
+var Comp = 1;
 //var _temp = "";
-	for(var i = 0;Comp!=0;i++){
-		var _temp = x.getInfo(typo,head)+"";
+//	for(var i = 0;Comp!=0;i++){
+		var _temp = x.getInfo(typo1,head)+"";
 		array_Temp = _temp.split(",");
 		head = array_Temp[0];
 		var length = head.length;
@@ -22,8 +20,8 @@ var Comp = 9;
 		Name = array_Temp[3];
 		IPA = array_Temp[4];
 		Account = array_Temp[5];
-		console.log(Address , typo , Name , IPA , Account);
+		console.log(Address , typo , Name , IPA , Account , head);
 
-	}
+//	}
 
 //console.log(array_Address);

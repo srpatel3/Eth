@@ -3,8 +3,8 @@ var s_add;
 var s_name;
 var s_ip;
 var s_account;
-addSeller("shirish",9,"shirish Patel","12.23.23.3",45);
-addSeller("shirish",10,"patel shirish","123.123.123.3",90);
+addSeller("shirish","shirish Patel","12.23.23.3",45);
+addSeller("shirish","patel shirish","123.123.123.3",90);
 function addSeller(dbname , address, sname, ip, acc){
 
 	s_dbname = dbname;
