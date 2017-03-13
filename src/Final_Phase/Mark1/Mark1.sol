@@ -63,9 +63,14 @@ contract X{
         list_Accounts[msg.sender].counterForBadReputation = 0;
     }
     
-    function buyInformation(string _datasetName, address _sellerAddress){
+    function buyInformation(string _datasetName, address _sellerAddress) constant returns(string){
         if(list_Accounts[msg.sender].accountBalance > list_Seller[_datasetName][_sellerAddress].cost){
-            
+            list_Accounts[msg.sender].accountBalance -= list_Seller[_datasetName][_sellerAddress].cost;
+            list_Accounts[_sellerAddress].accountBalance += list_Seller[_datasetName][_sellerAddress].cost;
+            return ("Something In URL");
+        }
+        else{
+            return "Insufficient Account Balance";
         }
     }
 }
