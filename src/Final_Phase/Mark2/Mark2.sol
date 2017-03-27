@@ -1,3 +1,7 @@
+//to do work list
+//1. Have to implement function for Seller reputation
+//2. make seller reputations affect the feedbacks given to the dataset by that account.
+//3. Try to join nodes using static script. 
 pragma solidity ^0.4.8;
 
 contract X{
