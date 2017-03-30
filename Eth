@@ -26,3 +26,22 @@ eth.getBalance(eth.accounts[0])
 miner.stop()
 
 You will have one private chain ready to be connected to our own cluster.
+
+
+//for transfering ethers to different account
+
+eth.sendTransaction({from: '0x036a03fc47084741f83938296a1c8ef67f6e34fa', to: '0xa8ade7feab1ece71446bed25fa0cf6745c19c3d5', value: web3.toWei(1, "ether")})
+
+
+var contractAbi = eth.contract(AbiOfContract);
+var myContract = contractAbi.at(contractAddress);
+
+
+//getting data to pass for passing variables
+
+var getdata = x.createAccount.getData("shirish");
+
+
+//actually making call using default account
+//should change default account if wants to go for different account address
+web3.eth.sendTransaction({to:0x0f45869032e651757b58079c148b386bec627987,gas:900000,data:getdata})
