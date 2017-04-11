@@ -1,4 +1,4 @@
-personal.unlockAccount(eth.accounts[0],"SHirish1221")
+personal.unlockAccount(eth.accounts[0],"shirish1221")
 
 web3.eth.defaultAccount = eth.accounts[0]
 

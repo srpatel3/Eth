@@ -42,7 +42,7 @@ contract X{
 
     //this struct will have qos information about that perticular dataset
     struct datasetNode_qos{
-      uint datasetFeedBack; //will have to come with the final function
+      int datasetFeedBack; //will have to come with the final function
       uint counterForGoodFeeds; //still have to decide about this
       uint counterForBadFeeds; //same here
       mapping (uint => trackFeedbacks) list_goodFeeds;
@@ -73,21 +73,7 @@ contract X{
     //function implementations starts
 
 
-    //for adding new type of dataset
-    function addDatasetType(string _datasetType) returns (string){
-      if(list_datasetType[_datasetType].doesExist != true){
-        list_datasetType[_datasetType].datasetType = _datasetType;
-        list_datasetType[_datasetType].listHead = 0;
-        list_datasetType[_datasetType].doesExist = true;
-        return "new type successfully added";
-      }
-      else{
-        return "dataset type already exist you can add dataset of this type";
-      }
-    }
-
     //this function will create new account for seller who wants to sell or publish dataset
-
     function createAccount(string _sellerName)returns (string){
         if(list_Accounts[msg.sender].doesExist!=true){
             list_Accounts[msg.sender].sellerName = _sellerName;
@@ -102,15 +88,31 @@ contract X{
         }
     }
 
+
+    //for adding new type of dataset
+    function addDatasetType(string _datasetType) returns (string){
+      if(list_datasetType[_datasetType].doesExist != true){
+        list_datasetType[_datasetType].datasetType = _datasetType;
+        list_datasetType[_datasetType].listHead = 0;
+        list_datasetType[_datasetType].doesExist = true;
+        return "new type successfully added";
+      }
+      else{
+        return "dataset type already exist you can add dataset of this type";
+      }
+    }
+
     //for adding infomration to the dataset
     //still need to implement next one method
-    function addDatasetInfo(string _datasetType, string _IP, string _datasetLocation, string _datasetDescription, string _encryptedURL, uint _cost){
+    function addDatasetInfo(string _datasetType, string _IP, string _datasetLocation, string _datasetDescription, string _encryptedURL, 
+uint _cost){
         list_datasetInfo[_datasetType][msg.sender].IP = _IP;
         list_datasetInfo[_datasetType][msg.sender].datasetLocation = _datasetLocation;
         list_datasetInfo[_datasetType][msg.sender].datasetDescription = _datasetDescription;
         list_datasetInfo[_datasetType][msg.sender].encryptedURL = _encryptedURL;
         list_datasetInfo[_datasetType][msg.sender].cost = _cost;
         list_datasetInfo[_datasetType][msg.sender].owner = msg.sender;
+        list_datasetInfo[_datasetType][msg.sender].next = list_datasetType[_datasetType].listHead;
     }
 
     //for adding QoS for dataset
@@ -135,7 +137,8 @@ contract X{
     }
     //this function will addNewdataset to the list
     //have to add conditions
-    function addDataset(string _datasetType, string _IP, string _datasetLocation, string _datasetDescription, string _encryptedURL, uint _cost, 
+    function addDataset(string _datasetType, string _IP, string _datasetLocation, string _datasetDescription, string _encryptedURL, uint 
+_cost, 
 uint volume){
         addDatasetInfo(_datasetType, _IP, _datasetLocation, _datasetDescription, _encryptedURL, _cost);
         addDatasetQos(_datasetType);
@@ -245,14 +248,7 @@ uint volume){
         list_Accounts[_sellerAddress].numberOfFeeds += 1;
     }
     
-}
-
-//contract just for testing purpose
-//will remove it once get done with coding
-contract Y is X{
-
-
-    function testaddDataset(string _datasetType)returns (string , string, string, string, uint, address, uint){
+    function getDatasetInfo(string _datasetType)returns (string , string, string, string, uint, address, int){
         return (list_datasetInfo[_datasetType][msg.sender].IP,
                 list_datasetInfo[_datasetType][msg.sender].datasetLocation,
                 list_datasetInfo[_datasetType][msg.sender].datasetDescription,
@@ -261,14 +257,25 @@ contract Y is X{
                 list_datasetInfo[_datasetType][msg.sender].owner,
                 list_datasetQos[_datasetType][msg.sender].datasetFeedBack);
     }
-    function testCreateAccount() returns (string,address, uint , int, bool){
-        return(list_Accounts[msg.sender].sellerName,list_Accounts[msg.sender].sellerAddress,list_Accounts[msg.sender].accountBalance,
-            list_Accounts[msg.sender].sellerReputation, list_Accounts[msg.sender].doesExist);
+    
+    function something(){
+        
+    }
+    function getAccountInfo() returns (string,address, uint , int, bool){
+        return(list_Accounts[msg.sender].sellerName,
+                list_Accounts[msg.sender].sellerAddress,
+                list_Accounts[msg.sender].accountBalance,
+                list_Accounts[msg.sender].sellerReputation, 
+                list_Accounts[msg.sender].doesExist);
     }
 
-    function testaddDatasetType(string _datasetType) returns(string, address, bool){
-        return (list_datasetType[_datasetType].datasetType, list_datasetType[_datasetType].listHead, list_datasetType[_datasetType].doesExist);
+    function getDatasetTypeInfo(string _datasetType) returns(string, address, bool){
+        return (list_datasetType[_datasetType].datasetType, 
+                list_datasetType[_datasetType].listHead, 
+                list_datasetType[_datasetType].doesExist);
     }
-
+    
 }
+
+
 

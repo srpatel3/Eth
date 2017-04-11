@@ -45,3 +45,6 @@ var getdata = x.createAccount.getData("shirish");
 //actually making call using default account
 //should change default account if wants to go for different account address
 web3.eth.sendTransaction({to:0x0f45869032e651757b58079c148b386bec627987,gas:900000,data:getdata})
+
+
+//should also add something for retreiving data
