@@ -17,13 +17,16 @@ for(;startingAddress!=endAddress&&counter <3;){
   length = temp.length;
   temp = temp + "";
   var arr = temp.split(",");
-  console.log(arr[0]);
-  console.log(arr[1]);
-  console.log(arr[2]);
-  console.log(arr[3]);
-  console.log(arr[4]);
-  console.log(arr[5]);
-  console.log(arr[6]);
+  console.log("---------------------------------------------------\n");
+  console.log("");
+  console.log("IP               :"+arr[0]);
+  console.log("Location :"+arr[1]);
+  console.log("Description      :"+arr[2]);
+  console.log("URL              :"+arr[3]);
+  console.log("Cost             :"+arr[4]);
+  console.log("Owner Address    :"+arr[5]);
+  console.log("Dataset Feeds    :"+arr[6]);
   startingAddress = y.getNextAddress("XX",startingAddress);
   counter ++;
+        console.log("");
 }

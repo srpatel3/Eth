@@ -1,0 +1,5 @@
+gcc Shell.c -o output
+
+./output >> Data
+
+

@@ -1,0 +1,24 @@
+---------------------------------------------------
+
+
+IP               :192.168.98.00
+Location :Tupelo MS
+Description      :Online Cam Data
+URL              :www.something.com
+Cost             :500
+Owner Address    :0x20df3558eee9fbc4a3bfc8ddb82fd8b63c4ef49e
+Dataset Feeds    :0
+
+---------------------------------------------------
+
+
+IP               :192.168.98.67
+Location :Oxford MS
+Description      :Traffic Data
+URL              :www.something.com
+Cost             :500
+Owner Address    :0x003cc32e6f95748ebf31809a2803dcfda2fe7526
+Dataset Feeds    :0
+
+true
+Shell -> 

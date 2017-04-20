@@ -1,0 +1,1 @@
+geth --exec 'loadScript("/home/shirish/Eth/Scripts/test.js")' attach ipc:/home/shirish/Chain/geth.ipc
