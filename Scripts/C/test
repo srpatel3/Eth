@@ -1,0 +1,3 @@
+geth attach ipc:/home/shirish/Chain/geth.ipc
+
+eth.accounts[0]
