@@ -1,5 +1,8 @@
-gcc Shell.c -o output
+#gcc Shell.c -o output
 
-./output >> Data
+#./output >> Data
 
+javac -g *.java
+
+java P4Driver
 

@@ -19,15 +19,5 @@ URL:www.something.com
 Cost:400
 Owner Address:0x003cc32e6f95748ebf31809a2803dcfda2fe7526
 Dataset Feeds:0
-
-
-IP:192.168.98.67
-Location:Oxford MS
-Description:Traffic Data
-URL:www.something.com
-Cost:9000
-Owner Address:0x003cc32e6f95748ebf31809a2803dcfda2fe7526
-Dataset Feeds:0
-
 true
 Shell -> 
