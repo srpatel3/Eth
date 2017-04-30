@@ -74,6 +74,7 @@ public class DatasetInfo {
 		return this.datasetFeeds;
 	}
 	public void printInfo(){
+		S
 		System.out.println(this.IP +"\n"+  this.datasetLocation +"\n"+ this.datasetDescription +"\n"+ this.URL +"\n"+ this.datasetCost +"\n"+ this.ownerAddress +"\n"+this.datasetFeeds);
 	}
 }

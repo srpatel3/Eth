@@ -13,7 +13,10 @@ var temp = "";
 var length= 0;
 var endAddress = 0x0000000000000000000000000000000000000000;
 for(;startingAddress!=endAddress&&counter <3;){
+
+//console.log(startingAddress)
   temp = y.getDatasetInfo("XX",startingAddress);
+//	console.log(temp);
   length = temp.length;
   temp = temp + "";
   var arr = temp.split(",");
@@ -26,7 +29,7 @@ for(;startingAddress!=endAddress&&counter <3;){
   console.log("Cost             :"+arr[4]);
   console.log("Owner Address    :"+arr[5]);
   console.log("Dataset Feeds    :"+arr[6]);
-  startingAddress = y.getNextAddress("XX",startingAddress);
+  //startingAddress = y.getNextAddress("XX",startingAddress);
   counter ++;
         console.log("");
 }

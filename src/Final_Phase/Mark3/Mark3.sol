@@ -33,29 +33,26 @@ contract X{
       uint volume; //volume of the dataset (has to be in KB format)
       address owner;//owner of this dataset
     }
-
-    //struct for tracking feedback givers
-    //will have to decide what to do with these guys later
-    struct trackFeedbacks{
-    address buyerAddress;
+    
+    //this struct  will keep track of the users who have used the dataset
+    //will be helpful for improving Qos
+    struct trackUsers{
+        bool haveUsed;
     }
-
+    
     //this struct will have qos information about that perticular dataset
     struct datasetNode_qos{
       int datasetFeedBack; //will have to come with the final function
-      uint counterForGoodFeeds; //still have to decide about this
-      uint counterForBadFeeds; //same here
-      mapping (uint => trackFeedbacks) list_goodFeeds;
-      mapping (uint => trackFeedbacks) list_badFeeds;
+      mapping(address => trackUsers) listOfUsers;
     }
 
     //will have information about the individual seller here
-    struct sellerAccounts{
-      string sellerName;
-      address sellerAddress;
+    struct userAccounts{
+      string userName;
+      address userAddress;
       uint accountBalance;
       bool doesExist;
-      int sellerReputation;
+      int userReputation;
       uint numberOfFeeds;
     }
 
@@ -66,7 +63,7 @@ contract X{
     mapping (string => type_dataset) list_datasetType;
     mapping (string => mapping(address=>datasetNode_info))list_datasetInfo;
     mapping (string => mapping (address => datasetNode_qos)) list_datasetQos;
-    mapping (address => sellerAccounts) list_Accounts;
+    mapping (address => userAccounts) user_Accounts;
 
 //---------------------------------------------------------------------------------------
 
@@ -75,12 +72,12 @@ contract X{
 
     //this function will create new account for seller who wants to sell or publish dataset
     function createAccount(string _sellerName)returns (string){
-        if(list_Accounts[msg.sender].doesExist!=true){
-            list_Accounts[msg.sender].sellerName = _sellerName;
-            list_Accounts[msg.sender].sellerAddress = msg.sender;
-            list_Accounts[msg.sender].accountBalance = 0;
-            list_Accounts[msg.sender].sellerReputation = 0;
-            list_Accounts[msg.sender].doesExist = true;
+        if(user_Accounts[msg.sender].doesExist!=true){
+            user_Accounts[msg.sender].userName = _sellerName;
+            user_Accounts[msg.sender].userAddress = msg.sender;
+            user_Accounts[msg.sender].accountBalance = 0;
+            user_Accounts[msg.sender].userReputation = 0;
+            user_Accounts[msg.sender].doesExist = true;
             return "account successfully created";
         }
         else{
@@ -101,6 +98,7 @@ contract X{
         return "dataset type already exist you can add dataset of this type";
       }
     }
+    
 
     //for adding infomration to the dataset
     //still need to implement next one method
@@ -116,14 +114,14 @@ uint _cost){
     }
 
     //for adding QoS for dataset
-    function addDatasetQos(string _datasetType){
+    function initDatasetQos(string _datasetType){
         list_datasetQos[_datasetType][msg.sender].datasetFeedBack = 0;
-        list_datasetQos[_datasetType][msg.sender].counterForGoodFeeds = 0;
-        list_datasetQos[_datasetType][msg.sender].counterForBadFeeds = 0;
+        //list_datasetQos[_datasetType][msg.sender].counterForGoodFeeds = 0;
+        //list_datasetQos[_datasetType][msg.sender].counterForBadFeeds = 0;
     }
 
     //for updating information of seller for this dataset
-    function addSellerInfo(uint _volume) returns (uint){
+    function addUserReward(uint _volume) returns (uint){
         uint price;
         uint temp;
         temp = _volume/2;
@@ -131,48 +129,63 @@ uint _cost){
         temp = temp/2;
         price += temp;
         //price = (_volume/1000)*100+(_volume/100)*10+(_volume/1000)*1;
-        list_Accounts[msg.sender].accountBalance += price;
+       user_Accounts[msg.sender].accountBalance += price;
 
         return price;
     }
     //this function will addNewdataset to the list
     //have to add conditions
     function addDataset(string _datasetType, string _IP, string _datasetLocation, string _datasetDescription, string _encryptedURL, uint 
-_cost, 
-uint volume){
+_cost, uint volume) constant returns (string){
+    if(!list_datasetInfo[_datasetType][msg.sender].doesExist){
         addDatasetInfo(_datasetType, _IP, _datasetLocation, _datasetDescription, _encryptedURL, _cost);
-        addDatasetQos(_datasetType);
-        addSellerInfo(volume);
+        initDatasetQos(_datasetType);
+        addUserReward(volume);
+        return ("account successfully created");
     }
+    else{
+        return "dataset already exist!!";
+    }
+}
 
     //will modify members of dataset Information
     //need to decide to have function for each variable or just to have one function that modify each datamembers
     // I think it would be good to have individual functions for each data members
-    function modifyDatatset(){
-
+    function modifyDatatset(string _datasetType, string _IP, string _datasetLocation, string _datasetDescription, string _encryptedURL, 
+uint 
+_cost, uint volume) constant returns(string){
+    if(list_datasetInfo[_datasetType][msg.sender].doesExist){
+        addDatasetInfo(_datasetType, _IP, _datasetLocation, _datasetDescription, _encryptedURL, _cost);
+        return ("account successfully created");
+    }
+    else{
+        return "dataset already exist!!";
+    }
+    
     }
     
     //function for buying dataset or I should say accessing dataset Information
     function buyDataset(string _datasetType, address _sellerAddress){
-        if(list_Accounts[msg.sender].accountBalance>=list_datasetInfo[_datasetType][msg.sender].cost){
-            list_Accounts[msg.sender].accountBalance -= list_datasetInfo[_datasetType][msg.sender].cost;
-            list_Accounts[_sellerAddress].accountBalance += list_datasetInfo[_datasetType][msg.sender].cost;
+        if(user_Accounts[msg.sender].accountBalance>=list_datasetInfo[_datasetType][msg.sender].cost){
+            user_Accounts[msg.sender].accountBalance -= list_datasetInfo[_datasetType][msg.sender].cost;
+            user_Accounts[_sellerAddress].accountBalance += list_datasetInfo[_datasetType][msg.sender].cost;
+            list_datasetQos[_datasetType][_sellerAddress].listOfUsers[msg.sender].haveUsed = true;
         }
     }
 
     //helper function for giveFeeds
     function calcMul() returns (int){
-        if(list_Accounts[msg.sender].numberOfFeeds>0){ //this will certain number in actual implementation
-            if(list_Accounts[msg.sender].sellerReputation == 1){ //will be bounded by certain amount
+        if(user_Accounts[msg.sender].numberOfFeeds>0){ //this will certain number in actual implementation
+            if(user_Accounts[msg.sender].userReputation == 1){ //will be bounded by certain amount
                 return 1;
             }
-            else if(list_Accounts[msg.sender].sellerReputation == 2){
+            else if(user_Accounts[msg.sender].userReputation == 2){
                 return 2;
             }
-            else if(list_Accounts[msg.sender].sellerReputation == -1){
+            else if(user_Accounts[msg.sender].userReputation == -1){
                 return -1;
             }
-            else if(list_Accounts[msg.sender].sellerReputation == -2){
+            else if(user_Accounts[msg.sender].userReputation == -2){
                 return -2;
             }
             else{
@@ -236,19 +249,21 @@ uint volume){
     
     //for giving feedback for Datasets
     function giveFeeds(string _datasetType,address _sellerAddress, int feeds){
+       if(list_datasetQos[_datasetType][_sellerAddress].listOfUsers[msg.sender].haveUsed==true){
         int multiplier = calcMul();
         int calculatedFeeds = countFeed(multiplier, feeds);
         list_datasetQos[_datasetType][_sellerAddress].datasetFeedBack += calculatedFeeds;
         if(calculatedFeeds > 0){
-            list_Accounts[_sellerAddress].sellerReputation += 1;
+            user_Accounts[_sellerAddress].userReputation += 1;
         }
         else{
-            list_Accounts[_sellerAddress].sellerReputation -= 1;
+            user_Accounts[_sellerAddress].userReputation -= 1;
         }
-        list_Accounts[_sellerAddress].numberOfFeeds += 1;
+        user_Accounts[_sellerAddress].numberOfFeeds += 1;
+       }
     }
     
-    function getDatasetInfo(string _datasetType)returns (string , string, string, string, uint, address, int){
+    function getDatasetInfo(string _datasetType)constant returns (string , string, string, string, uint, address, int){
         return (list_datasetInfo[_datasetType][msg.sender].IP,
                 list_datasetInfo[_datasetType][msg.sender].datasetLocation,
                 list_datasetInfo[_datasetType][msg.sender].datasetDescription,
@@ -258,24 +273,23 @@ uint volume){
                 list_datasetQos[_datasetType][msg.sender].datasetFeedBack);
     }
     
-    function something(){
-        
-    }
-    function getAccountInfo() returns (string,address, uint , int, bool){
-        return(list_Accounts[msg.sender].sellerName,
-                list_Accounts[msg.sender].sellerAddress,
-                list_Accounts[msg.sender].accountBalance,
-                list_Accounts[msg.sender].sellerReputation, 
-                list_Accounts[msg.sender].doesExist);
+  
+    function getAccountInfo() constant returns (string,address, uint , int, bool){
+        return(user_Accounts[msg.sender].userName,
+                user_Accounts[msg.sender].userAddress,
+                user_Accounts[msg.sender].accountBalance,
+                user_Accounts[msg.sender].userReputation, 
+                user_Accounts[msg.sender].doesExist);
     }
 
-    function getDatasetTypeInfo(string _datasetType) returns(string, address, bool){
+    function getDatasetTypeInfo(string _datasetType) constant returns(string, address, bool){
         return (list_datasetType[_datasetType].datasetType, 
                 list_datasetType[_datasetType].listHead, 
                 list_datasetType[_datasetType].doesExist);
     }
     
 }
+
 
 
 
